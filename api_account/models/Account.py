@@ -16,7 +16,7 @@ class Account(AbstractUser):
     is_active = models.BooleanField(default=True)
     address = models.CharField(max_length=255, null=True, blank=True)
     phone = models.CharField(max_length=11, null=True, blank=True)
-    age = models.IntegerField(validators=[MaxValueValidator(70), MinValueValidator(18)])
+    age = models.IntegerField(validators=[MaxValueValidator(70), MinValueValidator(18)], null=True, blank=True)
 
     role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='accounts')
 
