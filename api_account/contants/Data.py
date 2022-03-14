@@ -14,12 +14,12 @@ class RoleData(Enum):
 
     EMPLOYEE = {
         "id": "af63504a122c406f9fd9f3b7162b7591",
-        "name": "ENPLOYEE"
+        "name": "EMPLOYEE"
     }
 
 
 class UserData:
-    user = [
+    employees = [
         {
             "id": 2,
             "email": "giabao2807@gmail.com",
@@ -55,5 +55,16 @@ class UserData:
             "address": "Điện Phước, Điện Bàn, Quảng Nam",
             "phone": "0935169835",
             "age": 20
+        }
+    ]
+    managers = [
+        {
+            "id": 6,
+            "email": "bttthanh@dut.udn.vn",
+            "first_name": "Thanh",
+            "last_name": "Thanh",
+            "address": "Đà Nẵng",
+            "phone": "0961055111",
+            "age": 30
         }
     ]
