@@ -1,1 +1,1 @@
-from .Account import AccountSerializer
+from .Account import AccountSerializer, AccountInfoSerializer

@@ -6,13 +6,13 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from api_account.models import Account
-from api_account.serializers import AccountSerializer
+from api_account.serializers import AccountSerializer, AccountInfoSerializer
 from api_base.views import BaseViewSet
 
 
 class AccountViewSet(BaseViewSet):
     queryset = Account.objects.all()
-    serializer_class = AccountSerializer
+    serializer_class = AccountInfoSerializer
     permission_classes = [IsAuthenticated]
 
     permission_map = {
@@ -41,3 +41,9 @@ class AccountViewSet(BaseViewSet):
                     "refresh_token": str(token)
                 }, status=status.HTTP_200_OK)
         return Response({"error_message": "invalid username/password"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'])
+    def info(self, request):
+        user = request.user
+        serializer = AccountInfoSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
