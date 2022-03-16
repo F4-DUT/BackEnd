@@ -61,4 +61,3 @@ class AccountViewSet(BaseViewSet):
             self.perform_update(serializer)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
-
