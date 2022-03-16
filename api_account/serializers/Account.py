@@ -18,3 +18,9 @@ class AccountInfoSerializer(serializers.ModelSerializer):
                  'username', 'email', 'is_staff',
                  'is_superuser', 'phone', 'age',
                  'address', 'avatar', 'role', 'is_active')
+
+
+class GeneralInfoAccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        exclude = ('password', 'role', 'is_active', 'is_staff', 'is_superuser')

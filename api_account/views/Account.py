@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from api_account.models import Account
-from api_account.serializers import AccountSerializer, AccountInfoSerializer
+from api_account.serializers import AccountSerializer, AccountInfoSerializer, GeneralInfoAccountSerializer
+from api_account.services import AccountService
 from api_base.views import BaseViewSet
 
 
@@ -47,3 +48,17 @@ class AccountViewSet(BaseViewSet):
         user = request.user
         serializer = AccountInfoSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['patch'])
+    def edit(self, request):
+        user = request.user
+        avatar = request.FILES.get('avatar')
+        if avatar:
+            avatar_link = AccountService.upload_avatar(avatar)
+            request.data['avatar'] = avatar_link
+        serializer = GeneralInfoAccountSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            self.perform_update(serializer)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+

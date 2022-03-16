@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+
+import cloudinary
 from dotenv import load_dotenv
 from datetime import timedelta
 
@@ -153,7 +155,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# auth_user_model
 AUTH_USER_MODEL = 'api_account.Account'
+
+#cloudinary
+cloudinary.config(cloud_name=os.getenv('CLOUDINARY_NAME'),
+                  api_key=os.getenv('CLOUDINARY_API_KEY'),
+                  api_secret=os.getenv('CLOUDINARY_API_SECRET'))
 
 
 # Internationalization
