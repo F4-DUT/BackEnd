@@ -1,4 +1,4 @@
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from api_account.models import Account
-from api_account.serializers import AccountSerializer, AccountInfoSerializer, GeneralInfoAccountSerializer
+from api_account.serializers import AccountInfoSerializer, GeneralInfoAccountSerializer, \
+    ChangePassSerializer
 from api_account.services import AccountService
 from api_base.views import BaseViewSet
 
@@ -16,13 +17,19 @@ class AccountViewSet(BaseViewSet):
     serializer_class = AccountInfoSerializer
     permission_classes = [IsAuthenticated]
 
+    serializer_map = {
+        "change_password": ChangePassSerializer,
+        "list": GeneralInfoAccountSerializer,
+    }
+
     permission_map = {
         "login": [],
-        "signup": []
+        "signup": [],
+        "list": [],
     }
 
     @action(detail=False, methods=['post'])
-    def login(self, request):
+    def login(self, request, *args, **kwargs):
         user_data = request.data
         username = user_data.get('username')
         password = user_data.get('password')
@@ -44,7 +51,7 @@ class AccountViewSet(BaseViewSet):
         return Response({"error_message": "invalid username/password"}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['get'])
-    def info(self, request):
+    def info(self, request, *args, **kwargs):
         user = request.user
         serializer = AccountInfoSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -61,3 +68,16 @@ class AccountViewSet(BaseViewSet):
             self.perform_update(serializer)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['patch'])
+    def change_password(self, request, *args, **kwargs):
+        account = request.user
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+
+        if check_password(old_password, account.password):
+            account.password = make_password(new_password)
+            serializer = self.get_serializer(account, data=request.data, partial=True)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+            return Response({"detail": "Changed password!"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"error_message": "Old password is incorrect!"}, status=status.HTTP_400_BAD_REQUEST)

@@ -3,12 +3,6 @@ from rest_framework import serializers
 from api_account.models import Account
 
 
-class AccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Account
-        fields = '__all__'
-
-
 class AccountInfoSerializer(serializers.ModelSerializer):
     role = serializers.CharField(source='role.name')
 
@@ -24,3 +18,9 @@ class GeneralInfoAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         exclude = ('password', 'role', 'is_active', 'is_staff', 'is_superuser')
+
+
+class ChangePassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ('id', 'password')
