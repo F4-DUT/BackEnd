@@ -5,9 +5,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from api_account.contants import RoleData
 from api_account.models import Account
-from api_account.serializers import AccountInfoSerializer, GeneralInfoAccountSerializer, \
-    ChangePassSerializer
+from api_account.permission import AdminOrManagerPermission
+from api_account.serializers import AccountInfoSerializer, GeneralInfoAccountSerializer, CreateAccountSerializer
 from api_account.services import AccountService
 from api_base.views import BaseViewSet
 
@@ -18,14 +19,12 @@ class AccountViewSet(BaseViewSet):
     permission_classes = [IsAuthenticated]
 
     serializer_map = {
-        "change_password": ChangePassSerializer,
         "list": GeneralInfoAccountSerializer,
     }
 
     permission_map = {
         "login": [],
-        "signup": [],
-        "list": [],
+        "create_employee": [AdminOrManagerPermission],
     }
 
     @action(detail=False, methods=['post'])
@@ -76,8 +75,14 @@ class AccountViewSet(BaseViewSet):
 
         if check_password(old_password, account.password):
             account.password = make_password(new_password)
-            serializer = self.get_serializer(account, data=request.data, partial=True)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
+            account.save()
             return Response({"detail": "Changed password!"}, status=status.HTTP_204_NO_CONTENT)
         return Response({"error_message": "Old password is incorrect!"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'])
+    def create_employee(self, request):
+        request.data['role'] = RoleData.EMPLOYEE.value.get('id')
+        serialize = CreateAccountSerializer(data=request.data)
+        if serialize.is_valid(raise_exception=True):
+            serialize.save()
+            return Response(serialize.data, status=status.HTTP_201_CREATED)
