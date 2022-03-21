@@ -8,3 +8,6 @@ class ProductImage(TimeStampedModel):
     image = models.CharField(max_length=255, null=True, blank=True)
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
+
+    class Meta:
+        db_table = 'product_image'

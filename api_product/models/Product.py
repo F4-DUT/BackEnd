@@ -9,3 +9,6 @@ class Product(TimeStampedModel):
     status = models.BooleanField(null=True, blank=True)
 
     product_batch = models.ForeignKey(ProductBatch, on_delete=models.CASCADE, related_name="products")
+
+    class Meta:
+        db_table = 'product'
