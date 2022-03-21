@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'api_base',
-    'api_account'
+    'api_account',
+    'api_product'
 ]
 
 MIDDLEWARE = [
@@ -60,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'api_base.middleware.CommonMiddlewareAppendSlashWithoutRedirect',
 ]
 CORS_ORIGIN_ALLOW_ALL = True
 
