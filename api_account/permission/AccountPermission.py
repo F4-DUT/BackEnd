@@ -16,3 +16,7 @@ class ManagerPermission(MyBasePermission):
 
 class AdminPermission(MyBasePermission):
     match_any_roles = [RoleData.ADMIN]
+
+
+class RaspberryPermission(MyBasePermission):
+    match_any_roles = [RoleData.RASPBERRY]

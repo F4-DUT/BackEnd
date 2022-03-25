@@ -17,6 +17,11 @@ class RoleData(Enum):
         "name": "EMPLOYEE"
     }
 
+    RASPBERRY = {
+        "id": "a186c1d7-9fca-4370-964a-a27a778ec989",
+        "name": "RASPBERRY"
+    }
+
 
 class UserData:
     employees = [
