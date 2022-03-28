@@ -46,7 +46,7 @@ class AccountViewSet(BaseViewSet):
                     "role": account.role.name,
                     "access_token": str(token.access_token),
                     "refresh_token": str(token)
-                }, status=status.HTTP_200_OK)
+                })
         return Response({"error_message": "invalid username/password"}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['get'])
