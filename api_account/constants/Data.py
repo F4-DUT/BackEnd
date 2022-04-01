@@ -18,7 +18,7 @@ class RoleData(Enum):
     }
 
     RASPBERRY = {
-        "id": "a186c1d7-9fca-4370-964a-a27a778ec989",
+        "id": "a186c1d79fca4370964aa27a778ec989",
         "name": "RASPBERRY"
     }
 

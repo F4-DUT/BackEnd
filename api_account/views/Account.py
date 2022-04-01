@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from api_account.contants import RoleData
+from api_account.constants import RoleData
 from api_account.models import Account
 from api_account.permission import AdminOrManagerPermission
 from api_account.serializers import AccountInfoSerializer, GeneralInfoAccountSerializer, CreateAccountSerializer
