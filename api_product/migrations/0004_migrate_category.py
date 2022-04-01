@@ -1,6 +1,6 @@
 from django.db import migrations
 
-from api_product.contants import CategoryData
+from api_product.constants import CategoryData
 
 
 def init_data_category(apps, schema_editor):

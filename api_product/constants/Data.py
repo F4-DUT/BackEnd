@@ -4,13 +4,18 @@ import uuid
 
 class CategoryData(Enum):
     ERASER = {
-        "id": "fb974149-511d-4885-9c6b-cff2d54483ed",
+        "id": "fb974149511d48859c6bcff2d54483ed",
         "name": "ERASER"
     }
 
     NOTE = {
-        "id": "308cd8f9-ce04-4a30-8f0d-c858e86f671c",
+        "id": "308cd8f9ce044a308f0dc858e86f671c",
         "name": "STICKY NOTE"
+    }
+
+    DEFECTIVE_PRODUCT = {
+        "id": "c44410dcfe9e4aa89f4f821e51b956d5",
+        "name": "DEFECTIVE_PRODUCT"
     }
 
 
