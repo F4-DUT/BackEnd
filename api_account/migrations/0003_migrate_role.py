@@ -2,7 +2,7 @@
 
 from django.db import migrations
 
-from api_account.contants import RoleData
+from api_account.constants import RoleData
 
 
 def initial_role_data(apps, schema_editor):

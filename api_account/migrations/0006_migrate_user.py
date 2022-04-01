@@ -3,7 +3,7 @@ import os
 from django.contrib.auth.hashers import make_password
 from django.db import migrations
 
-from api_account.contants import UserData
+from api_account.constants import UserData
 
 
 def initial_user_data(apps, schema_editor):

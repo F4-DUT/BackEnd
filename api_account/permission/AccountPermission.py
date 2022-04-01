@@ -1,4 +1,4 @@
-from api_account.contants import RoleData
+from api_account.constants import RoleData
 from api_base.permission import MyBasePermission
 
 

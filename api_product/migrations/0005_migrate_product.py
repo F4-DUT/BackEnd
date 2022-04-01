@@ -2,7 +2,7 @@
 
 from django.db import migrations
 
-from api_product.contants import ProductData
+from api_product.constants import ProductData
 
 
 def init_data_product(apps, schema_editor):
