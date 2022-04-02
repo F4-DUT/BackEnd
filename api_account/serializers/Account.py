@@ -24,7 +24,7 @@ class GeneralInfoAccountSerializer(serializers.ModelSerializer):
 class CreateAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ('id', 'username', 'password', 'email', 'address', 'phone', 'age', 'role')
+        fields = ('id', 'username', 'password', 'email', 'role')
 
     def validate(self, attrs):
         password = attrs.get('password')
