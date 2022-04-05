@@ -1,9 +1,8 @@
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api_account.permission import RaspberryPermission
+from api_account.permission import RaspberryPermission, UserPermission
 from api_base.views import BaseViewSet
 from api_product.models import Product, Category, ProductImage
 from api_product.serializers import ProductSerializer, CategorySerializer, ProductImageSerializer
@@ -13,7 +12,7 @@ from api_product.services import ProductImageService, CategoryService, ProductSe
 class ProductViewSet(BaseViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [UserPermission]
 
     permission_map = {
         "send_image": [RaspberryPermission],

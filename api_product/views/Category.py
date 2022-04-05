@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from api_account.permission import UserPermission
 from api_base.views import BaseViewSet
 from api_product.models import Category, Product
 from api_product.serializers import CategorySerializer, ProductSerializer
@@ -10,7 +10,7 @@ from api_product.serializers import CategorySerializer, ProductSerializer
 
 class CategoryViewSet(BaseViewSet):
     queryset = Category.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [UserPermission]
     serializer_class = CategorySerializer
 
     @action(detail=True, methods=['get'])

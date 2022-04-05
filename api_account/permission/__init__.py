@@ -1,2 +1,2 @@
 from .AccountPermission import AdminOrManagerPermission, RaspberryPermission, AdminPermission, ManagerPermission,\
-    EmployeePermission
+    EmployeePermission, UserPermission
