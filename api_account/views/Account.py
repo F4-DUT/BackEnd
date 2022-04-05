@@ -1,13 +1,12 @@
 from django.contrib.auth.hashers import check_password, make_password
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from api_account.constants import RoleData
 from api_account.models import Account
-from api_account.permission import AdminOrManagerPermission
+from api_account.permission import AdminOrManagerPermission, UserPermission
 from api_account.serializers import AccountInfoSerializer, GeneralInfoAccountSerializer, CreateAccountSerializer
 from api_account.services import AccountService
 from api_base.views import BaseViewSet
@@ -16,7 +15,7 @@ from api_base.views import BaseViewSet
 class AccountViewSet(BaseViewSet):
     queryset = Account.objects.all()
     serializer_class = AccountInfoSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [UserPermission]
 
     serializer_map = {
         "list": GeneralInfoAccountSerializer,
