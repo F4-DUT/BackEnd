@@ -16,7 +16,8 @@ class ProductViewSet(BaseViewSet):
     permission_classes = [IsAuthenticated]
 
     permission_map = {
-        "send_image": [RaspberryPermission]
+        "send_image": [RaspberryPermission],
+        "send_images": [RaspberryPermission]
     }
 
     @action(detail=False, methods=['post'])
@@ -27,6 +28,19 @@ class ProductViewSet(BaseViewSet):
             category = CategoryService.check_category(image)
             product = ProductService.create(category)
             ProductImageService.create(image_url, product)
+            return Response({"Message": "Create and update status successfully!"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"error_message": "image is not defined!!"})
+
+    @action(detail=False, methods=['post'])
+    def send_images(self, request, *args, **kwargs):
+        image1 = request.FILES.get('image1')
+        image2 = request.FILES.get('image2')
+        if image1 and image2:
+            images = [image1, image2]
+            image_urls = ProductImageService.upload_images(images)
+            category = CategoryService.check_category(image1)   #not check 2 image
+            product = ProductService.create(category)
+            ProductImageService.create(image_urls, product)
             return Response({"Message": "Create and update status successfully!"}, status=status.HTTP_204_NO_CONTENT)
         return Response({"error_message": "image is not defined!!"})
 
@@ -42,7 +56,6 @@ class ProductViewSet(BaseViewSet):
     @action(detail=True, methods=['get'])
     def get_image(self, request, pk):
         product = self.get_object()
-
         if product:
             images = ProductImage.objects.filter(product=product)
             serializers = ProductImageSerializer(images, many=True)
