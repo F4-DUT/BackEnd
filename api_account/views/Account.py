@@ -19,7 +19,6 @@ class AccountViewSet(BaseViewSet):
     permission_classes = [UserPermission]
 
     serializer_map = {
-        "list": GeneralInfoAccountSerializer,
         "get_account": AdminGetAccountSerializer,
     }
 
