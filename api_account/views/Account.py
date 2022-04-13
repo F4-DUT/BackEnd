@@ -7,7 +7,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from api_account.constants import RoleData
 from api_account.models import Account
 from api_account.permission import AdminOrManagerPermission, UserPermission, AdminPermission
-from api_account.serializers import AccountInfoSerializer, GeneralInfoAccountSerializer, CreateAccountSerializer
+from api_account.serializers import AccountInfoSerializer, GeneralInfoAccountSerializer, CreateAccountSerializer, \
+    AdminGetAccountSerializer
 from api_account.services import AccountService
 from api_base.views import BaseViewSet
 
@@ -19,7 +20,7 @@ class AccountViewSet(BaseViewSet):
 
     serializer_map = {
         "list": GeneralInfoAccountSerializer,
-        "get_account": GeneralInfoAccountSerializer,
+        "get_account": AdminGetAccountSerializer,
     }
 
     permission_map = {
@@ -95,7 +96,7 @@ class AccountViewSet(BaseViewSet):
     def get_account(self, request, pk):
         account = self.get_object()
         if account:
-            return Response(GeneralInfoAccountSerializer(account).data, status=status.HTTP_200_OK)
+            return Response(AdminGetAccountSerializer(account).data, status=status.HTTP_200_OK)
         return Response({"error_message": "Account id is not defined!"}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['patch'])
@@ -106,7 +107,7 @@ class AccountViewSet(BaseViewSet):
             if avatar:
                 avatar_link = AccountService.upload_avatar(avatar)
                 request.data['avatar'] = avatar_link
-            serializer = GeneralInfoAccountSerializer(account, data=request.data, partial=True)
+            serializer = AdminGetAccountSerializer(account, data=request.data, partial=True)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -118,4 +119,19 @@ class AccountViewSet(BaseViewSet):
         if account:
             account.delete()
             return Response({"details": "Completed delete account!"}, status=status.HTTP_200_OK)
+        return Response({"error_message": "Account id is not defined!"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['put'])
+    def edit_avatar(self, request, pk):
+        account = self.get_object()
+        if account:
+            avatar = request.FILES.get('avatar')
+            if avatar:
+                avatar_link = AccountService.upload_avatar(avatar)
+                request.data['avatar'] = avatar_link
+                serializer = GeneralInfoAccountSerializer(account, data=request.data, partial=True)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({"error_message": "Avatar is not defined!"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"error_message": "Account id is not defined!"}, status=status.HTTP_400_BAD_REQUEST)

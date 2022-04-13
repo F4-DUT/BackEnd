@@ -30,3 +30,11 @@ class CreateAccountSerializer(serializers.ModelSerializer):
         password = attrs.get('password')
         attrs['password'] = make_password(password)
         return attrs
+
+
+class AdminGetAccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ('id', 'first_name', 'last_name',
+                 'username', 'password', 'email', 'phone', 'age',
+                 'address', 'avatar', 'role', 'is_active')
