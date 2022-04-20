@@ -2,14 +2,14 @@
 import uuid
 
 from django.db import migrations
-import  os
 
 
-def init_data_category(apps, schema_editor):
+def init_data_datasets(apps, schema_editor):
     dataset_model = apps.get_model("api_product", "Dataset")
     category_model = apps.get_model("api_product", "Category")
     eraser_category = category_model.objects.filter(name="ERASER").first()
     note_category = category_model.objects.filter(name="STICKY NOTE").first()
+    defetive_category = category_model.objects.filter(name="DEFECTIVE_PRODUCT").first()
 
     datasets = []
 
@@ -17,16 +17,33 @@ def init_data_category(apps, schema_editor):
     unvalid_url = "api_product/constants/unvalid/"
     logo = ['logo1', 'logo2']
     for i in range(len(logo)):
-        url = valid_url + logo[i] + '.txt'
-        f = open(url, "r")
-        list = os.listdir(url)
-        for j in range(len(list)):
+        url1 = valid_url + logo[i] + '.txt'
+        url2 = unvalid_url + logo[i] + '.txt'
+
+        f = open(url1, "r")
+        count = 0
+        for line in open(url1):
+            count += 1
+        for j in range(count):
             if i == 0:
                 datasets.append(dataset_model(id=uuid.uuid4(), url=f.readline(), category=eraser_category))
             else:
                 datasets.append(dataset_model(id=uuid.uuid4(), url=f.readline(), category=note_category))
 
-    category_model.objects.bulk_create(datasets)
+        f1 = open(url2, "r")
+        count = 0
+        for line in open(url2):
+            count += 1
+        for j in range(count):
+            datasets.append(dataset_model(id=uuid.uuid4(), url=f1.readline(), category=defetive_category))
+
+    dataset_model.objects.bulk_create(datasets)
+
+
+def delete_all_data(apps, schema_editor):
+    dataset_model = apps.get_model("api_product", "Dataset")
+    dataset_model.objects.all().delete()
+
 
 class Migration(migrations.Migration):
 
@@ -35,4 +52,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(init_data_datasets, delete_all_data)
     ]

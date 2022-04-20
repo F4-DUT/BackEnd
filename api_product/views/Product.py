@@ -27,7 +27,7 @@ class ProductViewSet(BaseViewSet):
             category = CategoryService.check_category(image)
             product = ProductService.create(category)
             ProductImageService.create(image_url, product)
-            return Response(ProductSerializer(product).data, status=status.HTTP_204_NO_CONTENT)
+            return Response(ProductSerializer(product).data, status=status.HTTP_200_OK)
         return Response({"error_message": "image is not defined!!"})
 
     @action(detail=False, methods=['post'])
@@ -40,7 +40,7 @@ class ProductViewSet(BaseViewSet):
             category = CategoryService.check_category(image1)   #not check 2 image
             product = ProductService.create(category)
             ProductImageService.create(image_urls, product)
-            return Response({"Message": "Create and update status successfully!"}, status=status.HTTP_204_NO_CONTENT)
+            return Response(ProductSerializer(product).data, status=status.HTTP_200_OK)
         return Response({"error_message": "image is not defined!!"})
 
     @action(detail=False, methods=['post'])
