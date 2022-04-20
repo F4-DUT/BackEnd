@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 import cloudinary
 from dotenv import load_dotenv
