@@ -4,6 +4,7 @@ from rest_framework.response import Response
 
 from api_account.permission import RaspberryPermission, UserPermission
 from api_base.views import BaseViewSet
+from api_product.constants import CategoryData
 from api_product.models import Product, Category, ProductImage
 from api_product.serializers import ProductSerializer, CategorySerializer, ProductImageSerializer
 from api_product.services import ProductImageService, CategoryService, ProductService
@@ -15,8 +16,7 @@ class ProductViewSet(BaseViewSet):
     permission_classes = [UserPermission]
 
     permission_map = {
-        "send_image": [RaspberryPermission],
-        "send_images": [RaspberryPermission]
+        "send_image": [RaspberryPermission]
     }
 
     @action(detail=False, methods=['post'])
@@ -27,19 +27,6 @@ class ProductViewSet(BaseViewSet):
             category = CategoryService.check_category(image)
             product = ProductService.create(category)
             ProductImageService.create(image_url, product)
-            return Response(ProductSerializer(product).data, status=status.HTTP_200_OK)
-        return Response({"error_message": "image is not defined!!"})
-
-    @action(detail=False, methods=['post'])
-    def send_images(self, request, *args, **kwargs):
-        image1 = request.FILES.get('image1')
-        image2 = request.FILES.get('image2')
-        if image1 and image2:
-            images = [image1, image2]
-            image_urls = ProductImageService.upload_images(images)
-            category = CategoryService.check_category(image1)   #not check 2 image
-            product = ProductService.create(category)
-            ProductImageService.create(image_urls, product)
             return Response(ProductSerializer(product).data, status=status.HTTP_200_OK)
         return Response({"error_message": "image is not defined!!"})
 

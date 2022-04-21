@@ -33,7 +33,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'f4be.ga', 'f4be.tk', '0a70-2405-4802-6056-56f0-b4c2-7853-2cf7-71a6.ap.ngrok.io']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'f4be.ga', 'f4be.tk', '9fb9-2001-ee0-24b-fc2d-99ac-df1c-5c23-38fa.ap.ngrok.io']
 
 
 # Application definition
