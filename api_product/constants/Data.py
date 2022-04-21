@@ -13,11 +13,15 @@ class CategoryData(Enum):
         "name": "STICKY NOTE"
     }
 
-    DEFECTIVE_PRODUCT = {
+    DEFECTIVE_PRODUCT1 = {
         "id": "c44410dcfe9e4aa89f4f821e51b956d5",
-        "name": "DEFECTIVE_PRODUCT"
+        "name": "DEFECTIVE_ERASER"
     }
 
+    DEFECTIVE_PRODUCT2 = {
+        "id": "bfbf186c983848fb89d59bef10882366",
+        "name": "DEFECTIVE_NOTE"
+    }
 
 class ProductData:
     erasers = [

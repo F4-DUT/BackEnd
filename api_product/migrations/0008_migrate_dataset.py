@@ -9,7 +9,8 @@ def init_data_datasets(apps, schema_editor):
     category_model = apps.get_model("api_product", "Category")
     eraser_category = category_model.objects.filter(name="ERASER").first()
     note_category = category_model.objects.filter(name="STICKY NOTE").first()
-    defetive_category = category_model.objects.filter(name="DEFECTIVE_PRODUCT").first()
+    eraser_defective = category_model.objects.filter(name="DEFECTIVE_ERASER").first()
+    note_defective = category_model.objects.filter(name="DEFECTIVE_NOTE").first()
 
     datasets = []
 
@@ -35,7 +36,10 @@ def init_data_datasets(apps, schema_editor):
         for line in open(url2):
             count += 1
         for j in range(count):
-            datasets.append(dataset_model(id=uuid.uuid4(), url=f1.readline(), category=defetive_category))
+            if i == 0:
+                datasets.append(dataset_model(id=uuid.uuid4(), url=f1.readline(), category=eraser_defective))
+            else:
+                datasets.append(dataset_model(id=uuid.uuid4(), url=f1.readline(), category=note_defective))
 
     dataset_model.objects.bulk_create(datasets)
 
