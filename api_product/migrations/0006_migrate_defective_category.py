@@ -7,7 +7,9 @@ def init_data_category(apps, schema_editor):
 
     categories = []
     category = CategoryData.DEFECTIVE_PRODUCT1
+    category1 = CategoryData.DEFECTIVE_PRODUCT2
     categories.append(category_model(id=category.value['id'], name=category.value['name']))
+    categories.append(category_model(id=category1.value['id'], name=category1.value['name']))
 
     category_model.objects.bulk_create(categories)
 
