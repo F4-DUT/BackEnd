@@ -12,7 +12,7 @@ class ProductService:
         print(category.name)
         name = category.name + ' ' + str(index)
         status = True
-        if category.name == CategoryData.DEFECTIVE_PRODUCT.value.get('name'):
+        if category.name == CategoryData.DEFECTIVE_PRODUCT1.value.get('name') or category.name == CategoryData.DEFECTIVE_PRODUCT2.value.get('name'):
             status = False
         product = Product(id=uuid.uuid4(), name=name, status=status, category=category)
         product.save()
