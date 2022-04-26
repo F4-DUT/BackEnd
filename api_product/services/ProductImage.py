@@ -17,11 +17,11 @@ class ProductImageService:
 
     @classmethod
     def upload_images(cls, images):
-        images_url = []
+        images_urls = []
         for image in images:
             upload_image = cloudinary.uploader.upload(image, folder=os.getenv('CLOUDINARY_PRODUCT_FOLDER'))
-            images_url.append(upload_image.get('url'))
-        return images_url
+            images_urls.append(upload_image.get('url'))
+        return images_urls
 
     @classmethod
     def create(cls, image_url, product):
