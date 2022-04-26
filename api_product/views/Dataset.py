@@ -15,7 +15,7 @@ from api_product.services import DatasetService
 class DatasetViewSet(BaseViewSet):
     queryset = Dataset.objects.all()
     permission_classes = [UserPermission]
-    pagination_class = [CustomPagePagination]
+    pagination_class = CustomPagePagination
 
     @action(detail=False, methods=['post'])
     def change_model(self, request):
@@ -24,3 +24,18 @@ class DatasetViewSet(BaseViewSet):
             new_model.save("api_product/constants/classify_model.h5")
             return Response({"detail": "Completed change file model!!"}, status=status.HTTP_204_NO_CONTENT)
         return Response({"error_message": "New model is conflict!!"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['delete'])
+    def delete_dataset(self, request, pk):
+        dataset = self.get_object()
+        category = dataset.category
+        if dataset:
+            dataset.delete()
+            rs = Dataset.objects.filter(category=category)
+            page = self.paginate_queryset(rs)
+            if page is not None:
+                res = DatasetSerializer(page, many=True)
+                return self.get_paginated_response(res.data)
+            res = DatasetSerializer(page, many=True)
+            return Response({'detail': res.data}, status=status.HTTP_200_OK)
+        return Response({"error_message": "dataset is not define!"}, status=status.HTTP_400_BAD_REQUEST)
