@@ -52,6 +52,7 @@ class CategoryViewSet(BaseViewSet):
         category = self.get_object()
         if category:
             images = request.FILES.getlist('images')
+            print(images)
             request.data._mutable = True
             image_urls = DatasetService.upload_images(images, category)
             DatasetService.create(image_urls, category)

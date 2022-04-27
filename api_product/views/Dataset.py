@@ -21,7 +21,7 @@ class DatasetViewSet(BaseViewSet):
     def change_model(self, request):
         new_model = tf.keras.models.load_model(request.FILES.get('new_model').temporary_file_path())
         if new_model:
-            new_model.save("api_product/constants/classify_model.h5")
+            new_model.save("api_product/constants/classify_model1.h5")
             return Response({"detail": "Completed change file model!!"}, status=status.HTTP_204_NO_CONTENT)
         return Response({"error_message": "New model is conflict!!"}, status=status.HTTP_400_BAD_REQUEST)
 
