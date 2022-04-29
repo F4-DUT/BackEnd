@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -47,3 +49,23 @@ class ProductViewSet(BaseViewSet):
             serializers = ProductImageSerializer(images, many=True)
             return Response(serializers.data, status=status.HTTP_200_OK)
         return Response({"error_message": "product is not defined!"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=['get'], detail=False)
+    def get_product_statistics(self, request, *args, **kwargs):
+        start_date = request.query_params.get("start_date", "")
+        end_date = request.query_params.get("end_date", "")
+
+        if not start_date or not end_date:
+            return Response({"detail": "Not found start_date and end_date in url param"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            start_date = datetime.strptime(start_date, '%Y-%m-%d')
+            end_date = datetime.strptime(end_date, '%Y-%m-%d')
+            if start_date > end_date:
+                raise ValueError
+        except ValueError:
+            return Response({"detail": "Invalid start_date/end_date"}, status=status.HTTP_400_BAD_REQUEST)
+
+        product_statistics = ProductService.get_product_statistics(start_date, end_date)
+        return Response(product_statistics)
