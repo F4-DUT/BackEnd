@@ -69,3 +69,11 @@ class ProductViewSet(BaseViewSet):
 
         product_statistics = ProductService.get_product_statistics(start_date, end_date)
         return Response(product_statistics)
+
+    @action(methods=['get'], detail=False)
+    def get_system_accuracy(self, request):
+        products = Product.objects.all()
+        if products.exists():
+            res = ProductService.get_accuracy(products)
+            return Response({"system_accuracy": res}, status=status.HTTP_200_OK)
+        return Response({"error_message": "fail to load products"}, status=status.HTTP_400_BAD_REQUEST)

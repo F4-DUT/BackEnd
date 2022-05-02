@@ -47,3 +47,14 @@ class ProductService:
             date = date + timedelta(days=1)
         return response
         return {"error_message": "no product"}
+
+    @classmethod
+    def get_accuracy(cls, products):
+        invalid = 0
+        valid = 0
+        for product in products:
+            if product.status:
+                valid += 1
+            else:
+                invalid += 1
+        return valid/products.count()
