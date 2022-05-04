@@ -57,4 +57,4 @@ class ProductService:
                 valid += 1
             else:
                 invalid += 1
-        return valid/products.count()
+        return valid/products.count()*100

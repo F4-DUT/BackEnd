@@ -77,3 +77,12 @@ class ProductViewSet(BaseViewSet):
             res = ProductService.get_accuracy(products)
             return Response({"system_accuracy": res}, status=status.HTTP_200_OK)
         return Response({"error_message": "fail to load products"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=['get'], detail=False)
+    def get_nearly_month_accuracy(self, request, *args, **kwargs):
+        nearly_month = datetime.now().month-1
+        products = Product.objects.filter(updated_at__month=nearly_month)
+        if products:
+            res = ProductService.get_accuracy(products)
+            return Response({"nearly_month_accuracy": res}, status=status.HTTP_200_OK)
+        return Response({"error_message": "products is not defined!"}, status=status.HTTP_400_BAD_REQUEST)
