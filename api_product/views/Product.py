@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+import time
 
 from rest_framework import status
 from rest_framework.decorators import action
@@ -6,10 +7,10 @@ from rest_framework.response import Response
 
 from api_account.permission import RaspberryPermission, UserPermission
 from api_base.views import BaseViewSet
-from api_product.constants import CategoryData
 from api_product.models import Product, Category, ProductImage
 from api_product.serializers import ProductSerializer, CategorySerializer, ProductImageSerializer
 from api_product.services import ProductImageService, CategoryService, ProductService
+from api_product.utils import DateTime
 
 
 class ProductViewSet(BaseViewSet):
@@ -81,8 +82,12 @@ class ProductViewSet(BaseViewSet):
     @action(methods=['get'], detail=False)
     def get_nearly_month_accuracy(self, request, *args, **kwargs):
         nearly_month = datetime.now().month-1
-        products = Product.objects.filter(updated_at__month=nearly_month)
+        start_date = datetime(datetime.now().year, nearly_month, 1, 0, 0, 1)
+        end_date = datetime(datetime.now().year, nearly_month, DateTime.last_day_of_month(datetime.now().year, nearly_month), 23, 59, 59)
+        products = Product.objects.filter(updated_at__gte=start_date,
+                                          updated_at__lte=end_date)
         if products:
             res = ProductService.get_accuracy(products)
             return Response({"nearly_month_accuracy": res}, status=status.HTTP_200_OK)
-        return Response({"error_message": "products is not defined!"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"nearly_month_accuracy": "0"}, status=status.HTTP_400_BAD_REQUEST)
+
