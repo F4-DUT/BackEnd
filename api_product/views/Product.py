@@ -105,5 +105,5 @@ class ProductViewSet(BaseViewSet):
                                     updated_at__lte=end_date).query)
         if products.exists():
             res = ProductService.get_accuracy(products)
-            return Response({"nearly_month_accuracy": res}, status=status.HTTP_200_OK)
-        return Response({"nearly_month_accuracy": "0"}, status=status.HTTP_200_OK)
+            return Response({"nearly_week_accuracy": res}, status=status.HTTP_200_OK)
+        return Response({"nearly_week_accuracy": "0"}, status=status.HTTP_200_OK)
