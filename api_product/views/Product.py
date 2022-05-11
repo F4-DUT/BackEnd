@@ -94,15 +94,12 @@ class ProductViewSet(BaseViewSet):
     @action(methods=['get'], detail=False)
     def get_nearly_week_accuracy(self, request, *args, **kwargs):
         wday_today = time.localtime(time.time()).tm_wday + 1
-        print(wday_today)
         start_date = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 0, 0, 1) - timedelta(days=wday_today+7)
         end_date = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 23, 59, 59) - timedelta(days=wday_today)
 
         products = Product.objects.filter(updated_at__gte=start_date,
                                           updated_at__lte=end_date)
 
-        print(Product.objects.filter(updated_at__gte=start_date,
-                                    updated_at__lte=end_date).query)
         if products.exists():
             res = ProductService.get_accuracy(products)
             return Response({"nearly_week_accuracy": res}, status=status.HTTP_200_OK)
