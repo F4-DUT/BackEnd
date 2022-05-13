@@ -8,3 +8,4 @@ router = routers.SimpleRouter(trailing_slash=True)
 router.register(r'', AccountViewSet, basename='account')
 
 urlpatterns = router.urls
+
