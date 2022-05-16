@@ -72,35 +72,12 @@ class ProductViewSet(BaseViewSet):
         return Response(product_statistics)
 
     @action(methods=['get'], detail=False)
-    def get_system_accuracy(self, request):
-        products = Product.objects.all()
-        if products.exists():
-            res = ProductService.get_accuracy(products)
-            return Response({"system_accuracy": res}, status=status.HTTP_200_OK)
-        return Response({"error_message": "fail to load products"}, status=status.HTTP_400_BAD_REQUEST)
+    def get_statistics_overview(self, request):
+        return Response({
+            "system": ProductService.get_system_accuracy(),
+            "month_accuracy": ProductService.get_month_accuracy(),
+            "week_accuracy": ProductService.get_week_accuracy(),
+            "AI_accuracy": ProductService.get_AI_accuracy()
+            }, status=status.HTTP_200_OK
+        )
 
-    @action(methods=['get'], detail=False)
-    def get_nearly_month_accuracy(self, request, *args, **kwargs):
-        nearly_month = datetime.now().month-1
-        start_date = datetime(datetime.now().year, nearly_month, 1, 0, 0, 1)
-        end_date = datetime(datetime.now().year, nearly_month, DateTime.last_day_of_month(datetime.now().year, nearly_month), 23, 59, 59)
-        products = Product.objects.filter(updated_at__gte=start_date,
-                                          updated_at__lte=end_date)
-        if products:
-            res = ProductService.get_accuracy(products)
-            return Response({"nearly_month_accuracy": res}, status=status.HTTP_200_OK)
-        return Response({"nearly_month_accuracy": "0"}, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(methods=['get'], detail=False)
-    def get_nearly_week_accuracy(self, request, *args, **kwargs):
-        wday_today = time.localtime(time.time()).tm_wday + 1
-        start_date = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 0, 0, 1) - timedelta(days=wday_today+7)
-        end_date = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 23, 59, 59) - timedelta(days=wday_today)
-
-        products = Product.objects.filter(updated_at__gte=start_date,
-                                          updated_at__lte=end_date)
-
-        if products.exists():
-            res = ProductService.get_accuracy(products)
-            return Response({"nearly_week_accuracy": res}, status=status.HTTP_200_OK)
-        return Response({"nearly_week_accuracy": "0"}, status=status.HTTP_200_OK)
