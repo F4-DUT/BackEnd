@@ -98,7 +98,7 @@ class ProductService:
 
         accuracy_difference = _accuracy - accuracy
         return {
-            "nearly_week_accuracy": accuracy,
+            "nearly_month_accuracy": accuracy,
             "month_accuracy": _accuracy,
             "accuracy_difference": accuracy_difference
         }
@@ -138,8 +138,6 @@ class ProductService:
     def get_AI_accuracy(cls):
         return {
                 "accuracy": 91.37,
-                "old_accuracy": 80.01
+                "old_accuracy": 80.01,
+                "accuracy_difference": 11.36
         }
-
-
-

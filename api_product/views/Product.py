@@ -80,4 +80,3 @@ class ProductViewSet(BaseViewSet):
             "AI_accuracy": ProductService.get_AI_accuracy()
             }, status=status.HTTP_200_OK
         )
-
