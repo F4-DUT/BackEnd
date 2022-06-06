@@ -33,14 +33,48 @@ class ProductViewSet(BaseViewSet):
             return Response(ProductSerializer(product).data, status=status.HTTP_200_OK)
         return Response({"error_message": "image is not defined!!"})
 
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['get'])
     def get_product_by_status(self, request):
         status_product = request.data.get('status')
         if status_product:
             products = Product.objects.filter(status=status_product)
-            serializers = ProductSerializer(products, many=True)
-            return Response(serializers.data, status=status.HTTP_200_OK)
+            if products.exists():
+                page = self.paginate_queryset(products)
+                if page is not None:
+                    rs = ProductSerializer(page, many=True)
+                    return self.get_paginated_response(rs.data)
+                res = ProductSerializer(page, many=True)
+                return Response({'detail': res.data}, status=status.HTTP_200_OK)
+            else:
+                return Response({"error_message": "product is not defined! "}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"error_message": "status is required!"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'])
+    def get_list_products(self, request):
+        try:
+            products = self.queryset
+            status_product = request.data.get('status')
+            category_id = request.data.get('category_id')
+
+            if status_product or category_id:
+                if category_id is not None:
+                    products = products.filter(category=category_id)
+                if status_product is not None:
+                    products = products.filter(status=status_product)
+                if products.exists():
+                    page = self.paginate_queryset(products)
+                    if page is not None:
+                        rs = ProductSerializer(page, many=True)
+                        return self.get_paginated_response(rs.data)
+                    res = ProductSerializer(page, many=True)
+                    return Response({'detail': res.data}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({"error_message": "product is not defined! "}, status=status.HTTP_200_OK)
+            else:
+                rs = ProductSerializer(self.paginate_queryset(self.queryset), many=True)
+                return self.get_paginated_response(rs.data)
+        except Exception as e:
+            return Response({"error_message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['get'])
     def get_image(self, request, pk):

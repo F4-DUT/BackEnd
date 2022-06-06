@@ -20,12 +20,15 @@ class CategoryViewSet(BaseViewSet):
     @action(detail=True, methods=['get'])
     def get_products(self, request, pk):
         category = self.get_object()
-
         if category:
             products = Product.objects.filter(category=category)
             if products.exists():
-                rs = ProductSerializer(products, many=True)
-                return Response(rs.data, status=status.HTTP_200_OK)
+                page = self.paginate_queryset(products)
+                if page is not None:
+                    rs = ProductSerializer(page, many=True)
+                    return self.get_paginated_response(rs.data)
+                res = ProductSerializer(page, many=True)
+                return Response({'detail': res.data}, status=status.HTTP_200_OK)
             else:
                 return Response({"error_message": "product is not defined! "}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"error_message": "category is not defined!"}, status=status.HTTP_400_BAD_REQUEST)
