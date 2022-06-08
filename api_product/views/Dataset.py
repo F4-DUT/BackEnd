@@ -9,7 +9,7 @@ from api_base.pagination import CustomPagePagination
 from api_base.views import BaseViewSet
 from api_product.models import Dataset, Category
 from api_product.serializers import DatasetSerializer
-from api_product.services import DatasetService
+from api_product.services import DatasetService, CategoryService
 
 
 class DatasetViewSet(BaseViewSet):
@@ -43,3 +43,12 @@ class DatasetViewSet(BaseViewSet):
             res = DatasetSerializer(page, many=True)
             return Response({'detail': res.data}, status=status.HTTP_200_OK)
         return Response({"error_message": "dataset is not define!"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'])
+    def train_mode(self, request, pk):
+        try:
+            if DatasetService.train_mode():
+                return Response({'success': "Model is trained!"}, status=status.HTTP_200_OK)
+            return Response({"error_message": "Model is train fail!"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error_message": str(e)}, status=status.HTTP_400_BAD_REQUEST)

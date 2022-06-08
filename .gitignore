@@ -117,3 +117,7 @@ GitHub.sublime-settings
 !.vscode/extensions.json
 .history
 
+
+# image datasets
+api_product/constants/train
+api_product/constants/valid

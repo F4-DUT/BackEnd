@@ -14,12 +14,11 @@ def init_data_datasets(apps, schema_editor):
 
     datasets = []
 
-    valid_url = "api_product/constants/valid/"
-    unvalid_url = "api_product/constants/unvalid/"
+    train_link = "api_product/constants/train_link/"
     logo = ['logo1', 'logo2']
     for i in range(len(logo)):
-        url1 = valid_url + logo[i] + '.txt'
-        url2 = unvalid_url + logo[i] + '.txt'
+        url1 = train_link + logo[i] + '.txt'
+        url2 = train_link + 'u' + logo[i] + '.txt'
 
         f = open(url1, "r")
         count = 0
