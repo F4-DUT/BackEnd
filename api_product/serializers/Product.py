@@ -7,6 +7,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+        ordering = ('created_at', 'updated_at')
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)

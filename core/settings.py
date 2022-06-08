@@ -46,6 +46,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'f4be.ga', 'f4be.tk', '7051-203-205-5
 INSTALLED_APPS = [
     "corsheaders",
     'channels',
+    'channels_redis',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,7 +57,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'api_base',
     'api_account',
-    'api_product'
+    'api_product',
+    'websocket'
 ]
 
 MIDDLEWARE = [
@@ -93,6 +95,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 ASGI_APPLICATION = 'core.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [('0.0.0.0', 6379)],
+        },
+    },
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
