@@ -89,19 +89,19 @@ class DatasetService:
             VALID_DATA = [VALID + logo1 + "/", VALID + logo2 + "/", VALID + ulogo1 + "/", VALID + ulogo2 + "/"]
             DATA = [TRAIN_DATA, VALID_DATA]
 
-            for l in range(2):
-                for i in range(4):
-                    ## read links url
-                    with open(DIRS[l][i], 'r') as f:
-                        links = f.readlines()
-                        print(links)
-
-                    ## download images from links
-                    for j in range(len(links)):
-                        response = requests.get(links[j])
-                        file = open(DATA[l][i] + str(j) + ".png", "wb")
-                        file.write(response.content)
-                        file.close()
+            # for l in range(2):
+            #     for i in range(4):
+            #         ## read links url
+            #         with open(DIRS[l][i], 'r') as f:
+            #             links = f.readlines()
+            #             print(links)
+            #
+            #         ## download images from links
+            #         for j in range(len(links)):
+            #             response = requests.get(links[j])
+            #             file = open(DATA[l][i] + str(j) + ".png", "wb")
+            #             file.write(response.content)
+            #             file.close()
 
                         ## Build file .pkl
             TRAIN_DIRECTORY = "api_product/constants/train"
@@ -213,9 +213,9 @@ class DatasetService:
                 aug.flow(trainX, trainY, batch_size=30),
                 validation_data=(validX, validY),
                 steps_per_epoch=trainX.shape[0] // 30,
-                epochs=5, verbose=1)
+                epochs=6, verbose=1)
 
-            model.save("api_product/constants/model.h5")
+            model.save("api_product/constants/classify_model.h5")
             return True
         except Exception as e:
             print(str(e))
