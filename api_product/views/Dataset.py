@@ -44,10 +44,10 @@ class DatasetViewSet(BaseViewSet):
             return Response({'detail': res.data}, status=status.HTTP_200_OK)
         return Response({"error_message": "dataset is not define!"}, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['post'])
-    def train_mode(self, request, pk):
+    @action(detail=False, methods=['get'])
+    def train_model(self, request):
         try:
-            if DatasetService.train_mode():
+            if DatasetService.train():
                 return Response({'success': "Model is trained!"}, status=status.HTTP_200_OK)
             return Response({"error_message": "Model is train fail!"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:

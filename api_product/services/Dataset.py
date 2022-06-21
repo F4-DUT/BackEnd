@@ -94,6 +94,7 @@ class DatasetService:
                     ## read links url
                     with open(DIRS[l][i], 'r') as f:
                         links = f.readlines()
+                        print(links)
 
                     ## download images from links
                     for j in range(len(links)):
@@ -103,8 +104,8 @@ class DatasetService:
                         file.close()
 
                         ## Build file .pkl
-            TRAIN_DIRECTORY = "./train"
-            VALID_DIRECTORY = "./valid"
+            TRAIN_DIRECTORY = "api_product/constants/train"
+            VALID_DIRECTORY = "api_product/constants/valid"
             DIRECTORY = [TRAIN_DIRECTORY, VALID_DIRECTORY]
             CATEGORIES = ['logo1', 'logo2', 'ulogo1', 'ulogo2']
 
@@ -113,6 +114,7 @@ class DatasetService:
             train_data = []
             valid_data = []
             data = [train_data, valid_data]
+
 
             for i in range(2):
                 for category in CATEGORIES:
@@ -124,7 +126,8 @@ class DatasetService:
                         img_arr = cv2.resize(img_arr, (IMG_SIZE, IMG_SIZE))
                         data[i].append([img_arr, label])
 
-                random.shuffle(data)
+            random.shuffle(data[0])
+            random.shuffle(data[1])
 
             train_x = []
             train_y = []
@@ -143,18 +146,18 @@ class DatasetService:
             VALID_X = np.array(x[1])
             VALID_Y = np.array(y[1])
 
-            pickle.dump(TRAIN_X, open('train_features.pkl', 'wb'))
-            pickle.dump(TRAIN_Y, open('train_labels.pkl', 'wb'))
-            pickle.dump(VALID_X, open('valid_features.pkl', 'wb'))
-            pickle.dump(VALID_Y, open('valid_labels.pkl', 'wb'))
+            pickle.dump(TRAIN_X, open('api_product/constants/train_features.pkl', 'wb'))
+            pickle.dump(TRAIN_Y, open('api_product/constants/train_labels.pkl', 'wb'))
+            pickle.dump(VALID_X, open('api_product/constants/valid_features.pkl', 'wb'))
+            pickle.dump(VALID_Y, open('api_product/constants/valid_labels.pkl', 'wb'))
 
             # ## build model
 
-            trainX = pickle.load(open('train_features.pkl', 'rb'))
-            trainY = pickle.load(open('train_labels.pkl', 'rb'))
+            trainX = pickle.load(open('api_product/constants/train_features.pkl', 'rb'))
+            trainY = pickle.load(open('api_product/constants/train_labels.pkl', 'rb'))
 
-            validX = pickle.load(open('valid_features.pkl', 'rb'))
-            validY = pickle.load(open('valid_labels.pkl', 'rb'))
+            validX = pickle.load(open('api_product/constants/valid_features.pkl', 'rb'))
+            validY = pickle.load(open('api_product/constants/valid_labels.pkl', 'rb'))
 
             # Build model
             model = Sequential()
@@ -212,7 +215,8 @@ class DatasetService:
                 steps_per_epoch=trainX.shape[0] // 30,
                 epochs=5, verbose=1)
 
-            model.save("model.h5")
+            model.save("api_product/constants/model.h5")
             return True
-        except:
+        except Exception as e:
+            print(str(e))
             return False

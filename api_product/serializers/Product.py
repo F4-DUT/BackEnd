@@ -18,5 +18,3 @@ class ProductSerializer(serializers.ModelSerializer):
         else:
             ret['image'] = None
         return ret
-
-

@@ -137,7 +137,7 @@ class ProductService:
     @classmethod
     def get_AI_accuracy(cls):
         return {
-                "accuracy": 91.37,
+                "accuracy": 81.49,
                 "old_accuracy": 80.01,
-                "accuracy_difference": 11.36
+                "accuracy_difference": 1.48
         }
