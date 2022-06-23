@@ -20,13 +20,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from websocket import consumers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r"api/v1/base/", include('api_base.urls')),
     url(r"api/v1/account/", include('api_account.urls')),
     url(r"api/v1/product/", include('api_product.urls')),
-    path(r"api/v1/websocket/", include('websocket.urls')),
     path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth.hashers import check_password, make_password
 from rest_framework import status
 from rest_framework.decorators import action
@@ -86,6 +88,7 @@ class AccountViewSet(BaseViewSet):
     @action(detail=False, methods=['post'])
     def create_employee(self, request):
         request.data['role'] = RoleData.EMPLOYEE.value.get('id')
+        request.data['password'] = os.getenv('DEFAULT_EMPLOYEE_PASSWORD')
         serialize = CreateAccountSerializer(data=request.data)
         if serialize.is_valid(raise_exception=True):
             serialize.save()
@@ -98,9 +101,9 @@ class AccountViewSet(BaseViewSet):
             return Response(AdminGetAccountSerializer(account).data, status=status.HTTP_200_OK)
         return Response({"error_message": "Account id is not defined!"}, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['patch'])
-    def edit_info(self, request, pk):
-        account = self.get_object()
+    @action(detail=False, methods=['patch'])
+    def edit_info(self, request):
+        account = request.user
         if account:
             avatar = request.FILES.get('avatar')
             if avatar:
@@ -120,9 +123,9 @@ class AccountViewSet(BaseViewSet):
             return Response({"details": "Completed delete account!"}, status=status.HTTP_200_OK)
         return Response({"error_message": "Account id is not defined!"}, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['put'])
-    def edit_avatar(self, request, pk):
-        account = self.get_object()
+    @action(detail=False, methods=['put'])
+    def edit_avatar(self, request):
+        account = request.user
         if account:
             avatar = request.FILES.get('avatar')
             if avatar:

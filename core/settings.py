@@ -45,8 +45,6 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'f4be.ga', 'f4be.tk', '7051-203-205-5
 
 INSTALLED_APPS = [
     "corsheaders",
-    'channels',
-    'channels_redis',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,7 +56,6 @@ INSTALLED_APPS = [
     'api_base',
     'api_account',
     'api_product',
-    'websocket'
 ]
 
 MIDDLEWARE = [

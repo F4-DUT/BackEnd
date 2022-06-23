@@ -41,7 +41,7 @@ class DatasetService:
     @classmethod
     def upload_images(cls, images, category):
         images_urls = []
-        category_map = ['logo1', 'logo2', 'unvalid1', 'unvalid2']
+        category_map = ['logo1', 'logo2', 'ulogo1', 'ulogo2']
 
         if category.name == CategoryData.NOTE.value.get('name'):
             folder_url = os.getenv('CLOUDINARY_DATASET_FOLDER') + category_map[1]
