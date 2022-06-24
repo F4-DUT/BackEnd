@@ -38,7 +38,7 @@ FILE_UPLOAD_HANDLERS = [
     'django.core.files.uploadhandler.TemporaryFileUploadHandler',
 ]
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'f4be.ga', 'f4be.tk', '7051-203-205-51-183.ap.ngrok.io']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'f4be.ga', 'f4be.tk', '5fc5-203-205-51-183.ap.ngrok.io']
 
 
 # Application definition

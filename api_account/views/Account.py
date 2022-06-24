@@ -30,7 +30,8 @@ class AccountViewSet(BaseViewSet):
         "create_employee": [AdminOrManagerPermission],
         "get_account": [AdminPermission],
         "edit_info": [AdminPermission],
-        "delete": [AdminPermission]
+        "delete": [AdminPermission],
+        "reset_password": [AdminPermission]
     }
 
     @action(detail=False, methods=['post'])
@@ -101,9 +102,9 @@ class AccountViewSet(BaseViewSet):
             return Response(AdminGetAccountSerializer(account).data, status=status.HTTP_200_OK)
         return Response({"error_message": "Account id is not defined!"}, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['patch'])
-    def edit_info(self, request):
-        account = request.user
+    @action(detail=True, methods=['patch'])
+    def edit_info(self, request, pk):
+        account = self.get_object()
         if account:
             avatar = request.FILES.get('avatar')
             if avatar:
@@ -136,4 +137,13 @@ class AccountViewSet(BaseViewSet):
                     serializer.save()
                     return Response(serializer.data, status=status.HTTP_200_OK)
             return Response({"error_message": "Avatar is not defined!"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error_message": "Account id is not defined!"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'])
+    def reset_password(self, request, pk):
+        account = self.get_object()
+        if account:
+            account.password = make_password(os.getenv('DEFAULT_EMPLOYEE_PASSWORD'))
+            account.save()
+            return Response({"success": "Reset password!"}, status=status.HTTP_200_OK)
         return Response({"error_message": "Account id is not defined!"}, status=status.HTTP_400_BAD_REQUEST)
